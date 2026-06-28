@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Short from "./components/short";
 import ProductDetail from "./components/ProductDetail";
+import CartPage from "./components/CartPage";
 
 function App() {
   const savedDataString = localStorage.getItem('my-cart') || "{}";
@@ -19,20 +20,22 @@ function App() {
     localStorage.setItem('my-cart', cartString);
   }
   
-  const totalCount = Object.keys(cart).reduce(function(previous, current){
-    return previous + cart[current];
-  }, 0);
+  const totalCount = Object.keys(cart);
+  const totalCarts = totalCount.length;
+
+  console.log("cart in app", cart)
 
   return (
-    <div className="h-screen box-border flex flex-col items-center">
-      <Header productCount={totalCount} />
-      <div className="grow h-screen">
+    <div className="h-screen box-border flex flex-col items-center justify-around">
+      <Header productCount={totalCarts} />
+      <div className="grow">
         <Routes>
           <Route path="" element={<Short />} />
           <Route
             path="/products/:id/"
             element={<ProductDetail onAddToCart={onAddToCart} />}
           />
+          <Route path={"/cart"} element={<CartPage cart={cart} />} />
         </Routes>
       </div>
 
