@@ -13,7 +13,7 @@ function ProductList({Products}) {
       {Products.map(function ({ thumbnail, title, category, price, id }) {
         return (
           <Product
-            key={id}
+            key={id} 
             id={id}
             image={thumbnail}
             title={title}
