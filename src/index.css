@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+
+.button {
+  @apply text-white bg-red-500 font-normal rounded-sm hover:text-red-500 hover:bg-white hover:border hover:border-red-500;
+}

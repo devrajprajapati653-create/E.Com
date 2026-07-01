@@ -4,6 +4,8 @@ import { VscStarEmpty } from "react-icons/vsc";
 import { use, useEffect, useState } from "react";
 import { getData } from "./API";
 import Loader from "./Loader";
+import Button from "./Button";
+import Input from "./Input";
 
 function ProductDetail({ onAddToCart }) {
   const [product, setProduct] = useState();
@@ -52,27 +54,25 @@ function ProductDetail({ onAddToCart }) {
             <VscStarEmpty />
           </div>
           <div className="flex gap-1">
-            <input
-              type="number"
+            <Input
+              type={"number"}
               value={Quantity}
               onChange={QuantityChange}
-              className="border-2 border-gray-500  rounded-xl p-1 w-12"
+              style="border-2 border-gray-500  rounded-xl p-1 w-12"
             />
-          
-              <button
+              <Button
                 onClick={onButtonClick}
-                className="text-white bg-red-500  hover:text-red-500 hover:bg-white hover:border hover:border-red-500 rounded-xl px-4 py-2"
-              >
-                ADD TO CART
-              </button>
+                style="button px-4 py-2"
+                text="ADD TO CART"
+                />
           
           </div>
           <div className="flex justify-between mt-10">
             <div>
               {id > 1 && (
                 <Link
-                  to={"/products/" + (id - 1)}
-                  className="bg-red-400 text-xl text-white hover:text-red-400 hover:bg-white hover:border hover:border-red-400 p-2 rounded-xl"
+                  to={"/products/" + (id - 1) }
+                  className="button text-xl p-2 "
                 >
                   ← Previous
                 </Link>
@@ -80,7 +80,7 @@ function ProductDetail({ onAddToCart }) {
             </div>
             <Link
               to={"/products/" + (id + 1)}
-              className="bg-red-400 text-xl text-white  hover:text-red-400 hover:bg-white hover:border hover:border-red-400 p-2 mb-4 rounded-xl"
+              className="p-2 mb-4 button text-xl"
             >
               Next →
             </Link>

@@ -1,31 +1,38 @@
 import React, { useState, useEffect } from "react";
 import CartList from "./CartList";
-import { getDataList } from "./API";
+import { getData } from "./API";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { Link } from "react-router-dom";
+import Button from "./Button";
+import Input from "./Input";
 
 
-function CartPage({ cart }) {
-  const [data, setData] = useState([]);
+function CartPage({cart}) {
+
+  const [filterCart, setFilterCart] = useState([]);
 
   useEffect(() => {
-    getDataList().then((res) => setData(res.data.products));
-  }, []);
+    const promises = Object.keys(cart).map((id) => getData(id));
 
-  const cartIds = Object.keys(cart);
+    Promise.all(promises).then((results) => {
+      console.log("Results from API:", results);
+      const products = results.map((product) => {
+        return {
+          ...product.data,
+          quantity: cart[product.data.id],
+        };
+      });
 
-  // 1. Map out your filtered cart items with quantities
-  const filterCart = data
-    .filter((product) => cartIds.includes(String(product.id)))
-    .map((product) => ({
-      ...product,
-      quantity: cart[String(product.id)],
-    }));
+      setFilterCart(products);
+    });
+  }, [cart]);
 
-  // 2. Derive the grand total directly from the filtered cart items
-  const grandTotal = filterCart.reduce((accumulator, currentItem) => {
-    return accumulator + currentItem.price * currentItem.quantity;
+  console.log("Filtered Cart:", filterCart);
+
+  const grandTotal = filterCart.reduce((total, product) => {
+    return total + product.price * product.quantity;
   }, 0);
+  
 
   return (
     <>
@@ -39,22 +46,26 @@ function CartPage({ cart }) {
               <p>Subtotal</p>
             </div>
           </header>
-          {/* Removed onSubTotal since we calculate total here */}
+
           <CartList cartItems={filterCart} />
           <footer className="w-full h-10 flex justify-around items-center">
             <div className="flex gap-10 w-1/2">
-              <input
-                type="text"
-                placeholder="Coupon code?"
-                className="border text-center p-1 rounded-md"
+              <Input
+                type={"text"}
+                placeholder={"Coupon Code?"}
+                style={
+                  "border text-center p-1 rounded-md outline-none uppercase"
+                }
               />
-              <button className="text-white bg-red-500 px-3 p-1 rounded-md">
-                APPLY COUPON
-              </button>
+              <Button
+                style="button px-3 p-1"
+                text="APPLY COUPON"
+              />
             </div>
-            <button className="text-gray-500 bg-red-500 px-3 p-1 rounded-md">
-              UPDATE CERT
-            </button>
+            <Button
+              style="button px-3 p-1 !text-gray-400"
+              text={"UPDATE CERT"}
+            />
           </footer>
         </div>
 
@@ -71,16 +82,16 @@ function CartPage({ cart }) {
           </header>
           <div className="flex items-center border-b p-2">
             <p>Sub Total</p>
-            {/* 3. Render the calculated total (formatted to 2 decimal places) */}
             <p className="pl-15">${grandTotal.toFixed(2)}</p>
           </div>
           <div className="flex items-center border-b p-2">
             <p>Total</p>
             <p className="pl-23 ">${grandTotal.toFixed(2)}</p>
           </div>
-          <button className="text-white bg-red-500 font-normal h-10 mx-10 m-2 rounded-sm">
-            PROCEED TO CHECOUT
-          </button>
+          <Button
+            style="button h-10 mx-10 m-2"
+            text="PROCEED TO CHECKOUT"
+          />
         </aside>
       </main>
     </>

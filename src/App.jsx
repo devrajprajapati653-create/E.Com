@@ -36,6 +36,7 @@ function App() {
             element={<ProductDetail onAddToCart={onAddToCart} />}
           />
           <Route path={"/cart"} element={<CartPage cart={cart} />} />
+          <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
       </div>
 
